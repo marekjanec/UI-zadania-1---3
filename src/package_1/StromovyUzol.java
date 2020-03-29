@@ -6,7 +6,7 @@ import java.util.List;
 
 public class StromovyUzol<T>{
     public T stav = null;
-    public List<StromovyUzol> dieta = new ArrayList<>();
+    public List<StromovyUzol<T>> dieta = new ArrayList<>();
     public StromovyUzol rodic = null;
 
     //konstruktor uzla
@@ -27,7 +27,7 @@ public class StromovyUzol<T>{
     }
 
     //pridanie zoznamu deti jednemu rodicovy
-    public void addDetiRodicovi(List<StromovyUzol> dieta) {
+    public void addDetiRodicovi(List<StromovyUzol<T>> dieta) {
         for(StromovyUzol t : dieta) {
             t.setRodic(this);
         }
@@ -35,7 +35,7 @@ public class StromovyUzol<T>{
     }
 
     //vrati zoznam deti uzla
-    public List<StromovyUzol> getDieta() {
+    public List<StromovyUzol<T>> getDieta() {
         return dieta;
     }
 
@@ -50,13 +50,29 @@ public class StromovyUzol<T>{
     }
 
     //nastavenie rodica uzlu
-    public void setRodic(StromovyUzol rodic) {
+    public void setRodic(StromovyUzol<T> rodic) {
         this.rodic = rodic;
     }
 
     //vrati rodica uzlu
     public StromovyUzol getRodic() {
         return rodic;
+    }
+    
+	@Override
+    public boolean equals(Object obj) {
+        if(obj instanceof StromovyUzol<?>){
+        	StromovyUzol<?> druhy = (StromovyUzol<?>)obj;
+            if(this.stav == druhy.stav){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else{
+            return false;
+        }
     }
 }
 

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Random;
 
 public class MainClass {
 
@@ -12,154 +13,52 @@ public class MainClass {
 		// TODO Auto-generated method stub
 		System.out.println("kontrolne hovno");
 		
+		int sirkaPlochy = 2;
+		int vyskaPlochy = 4;
+		
 		boolean nasloRiesenie = false;
 		
+		Stav pociatocnyStav1 = new Stav(Arrays.asList(3,1,0,2,5,4,7,6), sirkaPlochy, vyskaPlochy);
+		Stav pociatocnyStav2 = new Stav(Arrays.asList(1,2,3,4,5,6,7,0), sirkaPlochy, vyskaPlochy);
+		
 		HashTable frontHashTabulka = new HashTable();
+		HashTable hashTabulka1 = new HashTable();
+		HashTable hashTabulka2 = new HashTable();
 		
-		Start startVyhladavaniaStartCiel = new Start(Arrays.asList(1,3,0,4,2,6,7,5,8), frontHashTabulka, nasloRiesenie);
-		Start startVyhladavaniaCielStart = new Start(Arrays.asList(1,2,3,4,5,6,7,8,0), frontHashTabulka, nasloRiesenie);
+		Queue<StromovyUzol<Stav>> haldaUzlovStromu1 = new LinkedList<>();
+		Queue<StromovyUzol<Stav>> haldaUzlovStromu2 = new LinkedList<>();
+		
+		StromovyUzol<Stav> stromStavov1 = new StromovyUzol<Stav>(pociatocnyStav1);
+		StromovyUzol<Stav> stromStavov2 = new StromovyUzol<Stav>(pociatocnyStav2);
+		
+		stromStavov1.stav.vypisStav();
+		System.out.println();
+		stromStavov2.stav.vypisStav();
+		System.out.println();
+		
+		haldaUzlovStromu1.add(stromStavov1);
+		haldaUzlovStromu2.add(stromStavov2);
+		
+		hashTabulka1.vlozenieDoHashTabulky(pociatocnyStav1.stavNaInteger());
+		hashTabulka2.vlozenieDoHashTabulky(pociatocnyStav2.stavNaInteger());
+		
+		frontHashTabulka.vlozenieDoHashTabulky(pociatocnyStav1.stavNaInteger());
+		frontHashTabulka.vlozenieDoHashTabulky(pociatocnyStav2.stavNaInteger());
+		
+		if(pociatocnyStav1.testStavu()) {
+			hladanieRiesenia(stromStavov1, stromStavov2, haldaUzlovStromu1, haldaUzlovStromu2, frontHashTabulka, hashTabulka1, hashTabulka2, sirkaPlochy, vyskaPlochy, nasloRiesenie);
+		}
 
-        Thread threadStartCiel = new Thread(startVyhladavaniaStartCiel);
-        Thread threadCielStart = new Thread(startVyhladavaniaCielStart);
-        
-        threadStartCiel.start();
-        threadCielStart.start();
-		
-        
-		
 		/*
-		int sirkaTabulky = 3;
-		int vyskaTabulky = 3;
-		
-		List<Integer> listPStav = new ArrayList<Integer>();
-		listPStav.addAll(Arrays.asList(1,3,0,4,2,6,7,5,8));
-		List<Integer> listKStav = new ArrayList<Integer>();
-		listKStav.addAll(Arrays.asList(1,2,3,4,5,6,7,8,0));
-		
-		Stav pociatocnyStav = new Stav(listPStav, sirkaTabulky, vyskaTabulky);
-		Stav koncovyStav = new Stav(listKStav, sirkaTabulky , vyskaTabulky);
-		
-		//System.out.println("Kluc: " + pociatocnyStav.stavNaInteger());
-		//System.out.println("Kluc: " + koncovyStav.stavNaInteger());
-		//System.out.println();
-		
-		Prehladavanie prehladavanieStartCiel = new Prehladavanie(pociatocnyStav);
-		Prehladavanie prehladavanieCielStart = new Prehladavanie(koncovyStav);
-		
-		Thread threadStartCiel = new Thread(prehladavanieStartCiel);
-		Thread threadCielStart = new Thread(prehladavanieCielStart);
-		
-		
-		pociatocnyStav.vypisStav();
-		System.out.println();
-		koncovyStav.vypisStav();
-		System.out.println();
-		
-		HashTable frontObochSmerovPrehladavania = new HashTable();
-		*/
-		//HashTable hashTabulka = new HashTable();
-		
-		//frontObochSmerovPrehladavania.vlozenieDoHashTabulky(koncovyStav.stavNaInteger());
-		
-		//inicializovanie stromu s pociatocnzm stavom
-		//StromovyUzol<Stav> strom = new StromovyUzol(pociatocnyStav);
-		//hashTabulka.vlozenieDoHashTabulky(pociatocnyStav.stavNaInteger());
-		//frontObochSmerovPrehladavania.vlozenieDoHashTabulky(pociatocnyStav.stavNaInteger());
-		
-		//Stav priebeznyStav = new Stav(strom.getStav().list, sirkaTabulky, vyskaTabulky);
-		//frontObochSmerovPrehladavania.mazanieKlucaVHashTabulke(pociatocnyStav.stavNaInteger());
-		
-		/*
-		 * potrebujem spravit aby mi to prechadzalo strom
-		 * strom musim premenovat ako rodica, lebo vzdy to bude rodic v opakujucej sa funkcii strom = rodic
+		 * if(pociatocnyStav1.testStavu() && pociatocnyStav2.testStavu()) {
+			hladanieRiesenia(stromStavov1, stromStavov2, haldaUzlovStromu1, haldaUzlovStromu2, frontHashTabulka, hashTabulka1, hashTabulka2, 3, 3, nasloRiesenie);
+		}
 		 */
 		
-		
-		//toto je na ot abz som prechadzal strom stavov postupne do sirky
-		//Queue<Stav> haldaStavov = new LinkedList<>();
-		
-		/*
-		VytvaranieStavov vytvaranieStavov = new VytvaranieStavov();
-		System.out.println("\n---------------------------------------------------------------------------\n");
-		vytvaranieStavov.novyUzol(strom, hashTabulka, frontObochSmerovPrehladavania, sirkaTabulky, vyskaTabulky);
-		System.out.println("\n---------------------------------------------------------------------------\n");
-		System.out.println("\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
-		vypisUzlov(strom);
-		System.out.println("\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
-		System.out.println("\n---------------------------------------------------------------------------\n");
-		vytvaranieStavov.novyUzol(strom.getDieta().get(0), hashTabulka, frontObochSmerovPrehladavania, sirkaTabulky, vyskaTabulky);
-		System.out.println("\n---------------------------------------------------------------------------\n");
-		System.out.println("\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
-		vypisUzlov(strom);
-		System.out.println("\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
-		System.out.println("\n---------------------------------------------------------------------------\n");
-		vytvaranieStavov.novyUzol(strom.getDieta().get(1), hashTabulka, frontObochSmerovPrehladavania, sirkaTabulky, vyskaTabulky);
-		System.out.println("\n---------------------------------------------------------------------------\n");
-		System.out.println("\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
-		vypisUzlov(strom);
-		System.out.println("\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
-		
-		*/
-		/*
-		hashTabulka.vypisHashListu(hashTabulka.hashList);
-		hashTabulka.vlozenieDoHashTabulky(pociatocnyStav.stavNaInteger());
-		hashTabulka.vlozenieDoHashTabulky(koncovyStav.stavNaInteger());
-		hashTabulka.vypisHashListu(hashTabulka.hashList);
-		hashTabulka.vlozenieDoHashTabulky(pociatocnyStav.stavNaInteger());
-		hashTabulka.vypisHashListu(hashTabulka.hashList);
-		hashTabulka.vypisHashListu(hashTabulka.hashList);
-		hashTabulka.vlozenieDoHashTabulky(0);
-
-		//hashTabulka.vlozenieDoHashTabulky(0);
-		hashTabulka.vlozenieDoHashTabulky(1);
-		hashTabulka.vlozenieDoHashTabulky(2);
-		hashTabulka.vlozenieDoHashTabulky(3);
-
-		hashTabulka.vypisHashListu(hashTabulka.hashList);
-		hashTabulka.mazanieKlucaVHashTabulke(0);
-
-		hashTabulka.vypisHashListu(hashTabulka.hashList);
-		hashTabulka.vlozenieDoHashTabulky(11);
-
-		hashTabulka.vypisHashListu(hashTabulka.hashList);
-		
-		hashTabulka.vypisHashListu(hashTabulka.hashList);
-		hashTabulka.vlozenieDoHashTabulky(5);
-		hashTabulka.vlozenieDoHashTabulky(7);
-		hashTabulka.vlozenieDoHashTabulky(8);
-		hashTabulka.vlozenieDoHashTabulky(9);
-		hashTabulka.vlozenieDoHashTabulky(10);
-		hashTabulka.vypisHashListu(hashTabulka.hashList);
-		hashTabulka.vlozenieDoHashTabulky(11);
-		hashTabulka.vypisHashListu(hashTabulka.hashList);
-		hashTabulka.vlozenieDoHashTabulky(22);
-
-		hashTabulka.vypisHashListu(hashTabulka.hashList);
-		hashTabulka.vlozenieDoHashTabulky(33);
-		hashTabulka.vypisHashListu(hashTabulka.hashList);
-		hashTabulka.jeVTabulke(pociatocnyStav.stavNaInteger());
-		hashTabulka.jeVTabulke(11);
-		*/
-		/*
-		priebeznyStav.hore();
-		priebeznyStav.hore();
-		priebeznyStav.hore();
-		
-		priebeznyStav.dole();
-		priebeznyStav.dole();
-		priebeznyStav.dole();
-		priebeznyStav.vlavo();
-		priebeznyStav.vlavo();
-		priebeznyStav.vpravo();
-		priebeznyStav.vpravo();
-		
-		priebeznyStav.vpravo();
-		*/
 	}
 	
 
-	
-	
+
 	public static void vypisUzlov(StromovyUzol<Stav> uzol){
 
 		System.out.println("RODIC");
@@ -179,7 +78,134 @@ public class MainClass {
 				vypisUzlov(uzol.dieta.get(u));
 			}
 		}
-			
+	}
+	
+	public static void vypisUzlovOdRodica(StromovyUzol<Stav> uzol) {
+		
+		if(uzol.rodic != null) {
+			vypisUzlovOdRodica(uzol.getRodic());
+		}
+		System.out.println("od Rodica");
+		uzol.stav.vypisStav();
+		System.out.println();
+	}
+	
+	public static void vypisUzlovOdListu(StromovyUzol<Stav> uzol) {
+		System.out.println("Od Listu");
+		uzol.stav.vypisStav();
+		System.out.println();
+		
+		if(uzol.rodic != null) {
+			vypisUzlovOdListu(uzol.getRodic());
+		}
+		
+		
 		
 	}
+
+	public static void hladanieRiesenia(StromovyUzol<Stav> uzol1, StromovyUzol<Stav> uzol2,
+			Queue<StromovyUzol<Stav>> haldaUzlovStromu1, Queue<StromovyUzol<Stav>> haldaUzlovStromu2,
+			HashTable frontHashTabulka, HashTable hashTabulka1, HashTable hashTabulka2,
+			int sirkaTabulky, int vyskaTabulky, boolean nasloRiesenie) {
+		
+		VytvaranieStavov noveStavy1 = new VytvaranieStavov();
+		VytvaranieStavov noveStavy2 = new VytvaranieStavov();
+		
+		//mazem y front hash tabulky lebo uz nie je list
+		frontHashTabulka.mazanieKlucaVHashTabulke(uzol1.stav.stavNaInteger());
+		haldaUzlovStromu1.poll();
+		noveStavy1.novyStav(uzol1, hashTabulka1, frontHashTabulka, sirkaTabulky, vyskaTabulky, nasloRiesenie);
+		
+		for(StromovyUzol<Stav> s: uzol1.dieta) {
+			if(frontHashTabulka.jeVTabulke(s.stav.stavNaInteger())) {
+				System.out.println("naslo vo front hash tabulke spolocny stav:");
+				s.stav.vypisStav();
+				
+				//najdenie zhodneho uzla pre vypis cety
+				while(!haldaUzlovStromu2.peek().equals(s)) {
+					//naslo uzol
+					if(haldaUzlovStromu2.peek().stav.list.equals(s.stav.list)) {
+						break;
+					}
+					//nenaslo uzlo, posuva sa dalej
+					else {
+						haldaUzlovStromu2.remove();
+					}
+				}
+				System.out.println("\nstav z druhej haldy");
+				haldaUzlovStromu2.peek().stav.vypisStav();
+				System.out.println("\nvypis uzslo/stavov");
+				vypisUzlovOdRodica(s.rodic);
+				vypisUzlovOdListu(haldaUzlovStromu2.peek());
+				nasloRiesenie = true;
+				return;
+			}else {
+				
+				
+				haldaUzlovStromu1.add(s);
+				frontHashTabulka.vlozenieDoHashTabulky(s.stav.stavNaInteger());
+				
+			}
+		}
+		
+		//mazem y front hash tabulky lebo uz nie je list
+		frontHashTabulka.mazanieKlucaVHashTabulke(uzol2.stav.stavNaInteger());
+		haldaUzlovStromu2.poll();
+		noveStavy2.novyStav(uzol2, hashTabulka2, frontHashTabulka, sirkaTabulky, vyskaTabulky, nasloRiesenie);
+		
+		for(StromovyUzol<Stav> s: uzol2.dieta) {
+			if(frontHashTabulka.jeVTabulke(s.stav.stavNaInteger())) {
+				s.stav.vypisStav();
+				System.out.println("naslo vo front hash tabulke");
+				while(!haldaUzlovStromu1.peek().equals(s)) {
+					//haldaUzlovStromu1.peek().stav.vypisStav();
+					if(haldaUzlovStromu1.peek().stav.list.equals(s.stav.list)) {
+						break;
+					}else {
+						haldaUzlovStromu1.remove();
+					}
+				}
+				System.out.println("\nstav z druhej haldy");
+				haldaUzlovStromu1.peek().stav.vypisStav();
+				System.out.println("\nvypis uzslo/stavov");
+				vypisUzlovOdRodica(haldaUzlovStromu1.peek());
+				vypisUzlovOdListu(s.rodic);
+				nasloRiesenie = true;
+				return;
+			}else {
+				haldaUzlovStromu2.add(s);
+				frontHashTabulka.vlozenieDoHashTabulky(s.stav.stavNaInteger());
+			}
+		}
+
+		if(!nasloRiesenie) {
+			StromovyUzol<Stav> vrchnyUzolHaldy1 = haldaUzlovStromu1.peek();
+			StromovyUzol<Stav> vrchnyUzolHaldy2 = haldaUzlovStromu2.peek();
+			
+			hladanieRiesenia(vrchnyUzolHaldy1, vrchnyUzolHaldy2, haldaUzlovStromu1, haldaUzlovStromu2, frontHashTabulka, hashTabulka1, hashTabulka2, sirkaTabulky, vyskaTabulky, nasloRiesenie);
+		}
+	}
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

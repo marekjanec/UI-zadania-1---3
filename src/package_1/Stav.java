@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Stav{
 	public List<Integer> list = new ArrayList<Integer>();
-	public String opretor = "null";
+	public String operator = "null";
 	public int sirkaTabulky = 0;
 	public int vyskaTabulky = 0;
 	
@@ -27,12 +27,12 @@ public class Stav{
 		this.list.addAll(list);
 		this.sirkaTabulky = sirkaTabulky;
 		this.vyskaTabulky = vyskaTabulky;
-		this.opretor = operator;
+		this.operator = operator;
 	}
 	
 	public Stav(List<Integer> list, String operator) {
 		this.list.addAll(list);
-		this.opretor = operator;
+		this.operator = operator;
 	}
 
 	public void vypisStav() {
@@ -53,7 +53,7 @@ public class Stav{
 		//posuvanie hore len ak je nula/volne policko na idexoch od 0 po 5
 		if(this.list.indexOf(0) >= 0 && this.list.indexOf(0) <= ((this.list.size() - 1) - this.sirkaTabulky)) { //nula musi byt na inom indexe ako je posledny riadok
 			//System.out.println("\nPosunul som hore!");
-			this.opretor = "hore";
+			this.operator = "hore";
 			//this.vypisStav();
 			//System.out.println();
 			
@@ -78,7 +78,7 @@ public class Stav{
 		//posuvanie dole len ak je nula/volne policko na indexoch 3 az 8
 		if(this.list.indexOf(0) >= this.sirkaTabulky && this.list.indexOf(0) <= (this.list.size()-1)) { //mula musi byt na inom indexe ako je prvy riadok
 			//System.out.println("\nPosunul som dole!");
-			this.opretor = "dole";
+			this.operator = "dole";
 			//this.vypisStav();
 			//System.out.println();
 			
@@ -103,7 +103,7 @@ public class Stav{
 		//posunie vlavo ak je nula/prazdne policko na indexe s mod3 0 alebo 1
 		if(this.list.indexOf(0) % this.sirkaTabulky != (this.sirkaTabulky-1)) { //modulo poctu stlpcov musi byt insie ako modulo posledneho stlpca
 			//System.out.println("\nPosunul som vlalo!");
-			this.opretor = "vlavo";
+			this.operator = "vlavo";
 			//this.vypisStav();
 			//System.out.println();
 			
@@ -128,7 +128,7 @@ public class Stav{
 		//posuniec vpravo len ak je nula/prazdne policko na indexe s mod.srikaTabulky 0
 		if(this.list.indexOf(0) % this.sirkaTabulky != 0) {	
 			//System.out.println("\nPosunul som vpravo!");
-			this.opretor = "vpravo";
+			this.operator = "vpravo";
 			//this.vypisStav();
 			//System.out.println();
 			
@@ -162,8 +162,49 @@ public class Stav{
 		}
 		return kluc;
 	}
-
 	
+	public boolean jeStavRiesitelny() {
+		int pomocnik = 0;
+		for(int i = 0; i < this.list.size(); i++) {
+			if(this.list.get(i) != 0) {
+				for(int j = (i + 1); j < this.list.size(); j++) {
+					if(this.list.get(i) > this.list.get(j)) {
+						pomocnik++;
+					}
+				}
+			}
+		}
+		if(pomocnik % 2 == 0) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	public boolean testStavu() {
+		if(jeStavRiesitelny()) {
+			System.out.println("je riesiltelny");
+			return true;
+		}else {
+			System.out.println("nie jeriesilteny");
+			return false;
+		}
+	}
 
 
+	@Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Stav){
+        	Stav druhy = (Stav)obj;
+            if(this.list == druhy.list){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else{
+            return false;
+        }
+    }
 }

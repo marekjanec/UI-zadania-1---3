@@ -1,7 +1,10 @@
 package package_1;
 
 public class VytvaranieStavov {
-	Stav priebeznyStav;
+	Stav priebeznyStavHore;
+	Stav priebeznyStavDole;
+	Stav priebeznyStavVpravo;
+	Stav priebeznyStavVlavo;
 	
 	public VytvaranieStavov() {
 		
@@ -10,107 +13,79 @@ public class VytvaranieStavov {
 	//ako vstup do funkcie na vytvaranie novych stavou ide povodny/rodicovsky stav/uzol
 	public void novyStav(StromovyUzol<Stav> uzol, HashTable hashTabulka, HashTable frontHashTabulka, int sirkaTabulky, int vyskaTabulky, boolean nasloRiesenie) {
 		
-		priebeznyStav = new Stav(uzol.getStav().list, sirkaTabulky, vyskaTabulky);
+		this.priebeznyStavHore = new Stav(uzol.stav.list, sirkaTabulky, vyskaTabulky);
+		frontHashTabulka.mazanieKlucaVHashTabulke(uzol.stav.stavNaInteger());
+		//System.out.println("Stav vymazany z frontu");
+		//uzol.stav.vypisStav();
+		//System.out.println();
 		
 		//podmienka ktora kontroluje aby sa nespravil reverzny tah alebo ak je to prvy tah
-		if(!uzol.getStav().opretor.equals("dole") || uzol.getStav().opretor.equals("null")) {
+		if(!uzol.getStav().operator.equals("dole") || uzol.getStav().operator.equals("null")) {
 			//kotrola ci sa da posunut policko hore
-			if(priebeznyStav.hore()) {
+			if(priebeznyStavHore.hore()) {
 				//kotrola ci uz dany stav existuje, ak nie tak ho ulozi, inak ide dalej
-				if(!hashTabulka.jeVTabulke(priebeznyStav.stavNaInteger())) {
-					hashTabulka.vlozenieDoHashTabulky(priebeznyStav.stavNaInteger());
-					//kontrola ci dany stav nie je zhodny so stavom z frontu, ak je naslo riesenie, inak prida novy stav do frontHashTabulky
-					if(frontHashTabulka.jeVTabulke(priebeznyStav.stavNaInteger())) {
-						//tuto by to malo ukoncit vsetko vyhladavanie a ukocit vsetky thready
-						System.out.println("\nNaslo zhodu v fromtHashTabulke");
-						nasloRiesenie = true;
-						return;
-					}else {
-						//vkladam stav do front hash tabulky
-						frontHashTabulka.vlozenieDoHashTabulky(priebeznyStav.stavNaInteger());
-						//vkladam stav do stromu
-						StromovyUzol<Stav> uzolHore = new StromovyUzol(priebeznyStav);
-						uzolHore.setRodic(uzol);
-						uzol.addDieta(uzolHore);
-					}	
+				if(!hashTabulka.jeVTabulke(priebeznyStavHore.stavNaInteger())) {
+					hashTabulka.vlozenieDoHashTabulky(priebeznyStavHore.stavNaInteger());
+					
+					//vkladam stav do stromu
+					StromovyUzol<Stav> uzolHore = new StromovyUzol<Stav>(priebeznyStavHore);
+					uzolHore.setRodic(uzol);
+					uzol.addDieta(uzolHore);
+					
 				}
 			}
 		}
-		priebeznyStav = new Stav(uzol.getStav().list, sirkaTabulky, vyskaTabulky);
+		this.priebeznyStavDole = new Stav(uzol.stav.list, sirkaTabulky, vyskaTabulky);
 		
 		//podmienka ktora kontroluje aby sa nespravil reverzny tah alebo ak je to prvy tah
-		if(!uzol.getStav().opretor.equals("hore") || uzol.getStav().opretor.equals("null")) {
+		if(!uzol.getStav().operator.equals("hore") || uzol.getStav().operator.equals("null")) {
 			//kotrola ci sa da posunut policko dole
-			if(priebeznyStav.dole()) {
+			if(priebeznyStavDole.dole()) {
 				//kotrola ci uz dany stav existuje, ak nie tak ho ulozi, inak ide dalej
-				if(!hashTabulka.jeVTabulke(priebeznyStav.stavNaInteger())) {
-					hashTabulka.vlozenieDoHashTabulky(priebeznyStav.stavNaInteger());
-					//kontrola ci dany stav nie je zhodny so stavom z frontu, ak je naslo riesenie, inak prida novy stav do frontHashTabulky
-					if(frontHashTabulka.jeVTabulke(priebeznyStav.stavNaInteger())) {
-						//tuto by to malo ukoncit vsetko vyhladavanie a ukocit vsetky thready
-						System.out.println("\nNaslo zhodu v fromtHashTabulke");
-						nasloRiesenie = true;
-						return;
-					}else {
-						//vkladam stav do front hash tabulky
-						frontHashTabulka.vlozenieDoHashTabulky(priebeznyStav.stavNaInteger());
-						//vkladam stav do stromu
-						StromovyUzol<Stav> uzolDole = new StromovyUzol(priebeznyStav);
-						uzolDole.setRodic(uzol);
-						uzol.addDieta(uzolDole);
-					}	
+				if(!hashTabulka.jeVTabulke(priebeznyStavDole.stavNaInteger())) {
+					hashTabulka.vlozenieDoHashTabulky(priebeznyStavDole.stavNaInteger());
+					
+					//vkladam stav do stromu
+					StromovyUzol<Stav> uzolDole = new StromovyUzol<Stav>(priebeznyStavDole);
+					uzolDole.setRodic(uzol);
+					uzol.addDieta(uzolDole);
+						
 				}
 			}
 		}
-		priebeznyStav = new Stav(uzol.getStav().list, sirkaTabulky, vyskaTabulky);
+		this.priebeznyStavVpravo = new Stav(uzol.stav.list, sirkaTabulky, vyskaTabulky);
 		
 		//podmienka ktora kontroluje aby sa nespravil reverzny tah alebo ak je to prvy tah
-		if(!uzol.getStav().opretor.equals("vlavo") || uzol.getStav().opretor.equals("null")) {
+		if(!uzol.getStav().operator.equals("vlavo") || uzol.getStav().operator.equals("null")) {
 			//kotrola ci sa da posunut policko vpravo
-			if(priebeznyStav.vpravo()) {
+			if(priebeznyStavVpravo.vpravo()) {
 				//kotrola ci uz dany stav existuje, ak nie tak ho ulozi, inak ide dalej
-				if(!hashTabulka.jeVTabulke(priebeznyStav.stavNaInteger())) {
-					hashTabulka.vlozenieDoHashTabulky(priebeznyStav.stavNaInteger());
-					//kontrola ci dany stav nie je zhodny so stavom z frontu, ak je naslo riesenie, inak prida novy stav do frontHashTabulky
-					if(frontHashTabulka.jeVTabulke(priebeznyStav.stavNaInteger())) {
-						//tuto by to malo ukoncit vsetko vyhladavanie a ukocit vsetky thready
-						System.out.println("\nNaslo zhodu v fromtHashTabulke");
-						nasloRiesenie = true;
-						return;
-					}else {
-						//vkladam stav do front hash tabulky
-						frontHashTabulka.vlozenieDoHashTabulky(priebeznyStav.stavNaInteger());
-						//vkladam stav do stromu
-						StromovyUzol<Stav> uzolVpravo = new StromovyUzol(priebeznyStav);
-						uzolVpravo.setRodic(uzol);
-						uzol.addDieta(uzolVpravo);
-					}	
+				if(!hashTabulka.jeVTabulke(priebeznyStavVpravo.stavNaInteger())) {
+					hashTabulka.vlozenieDoHashTabulky(priebeznyStavVpravo.stavNaInteger());
+					
+					//vkladam stav do stromu
+					StromovyUzol<Stav> uzolVpravo = new StromovyUzol<Stav>(priebeznyStavVpravo);
+					uzolVpravo.setRodic(uzol);
+					uzol.addDieta(uzolVpravo);
+						
 				}
 			}
 		}
-		priebeznyStav = new Stav(uzol.getStav().list, sirkaTabulky, vyskaTabulky);
+		this.priebeznyStavVlavo = new Stav(uzol.stav.list, sirkaTabulky, vyskaTabulky);
 		
 		//podmienka ktora kontroluje aby sa nespravil reverzny tah alebo ak je to prvy tah
-		if(!uzol.getStav().opretor.equals("vpravo") || uzol.getStav().opretor.equals("null")) {
+		if(!uzol.getStav().operator.equals("vpravo") || uzol.getStav().operator.equals("null")) {
 			//kotrola ci sa da posunut policko vlavo
-			if(priebeznyStav.vlavo()) {
+			if(priebeznyStavVlavo.vlavo()) {
 				//kotrola ci uz dany stav existuje, ak nie tak ho ulozi, inak ide dalej
-				if(!hashTabulka.jeVTabulke(priebeznyStav.stavNaInteger())) {
-					hashTabulka.vlozenieDoHashTabulky(priebeznyStav.stavNaInteger());
-					//kontrola ci dany stav nie je zhodny so stavom z frontu, ak je naslo riesenie, inak prida novy stav do frontHashTabulky
-					if(frontHashTabulka.jeVTabulke(priebeznyStav.stavNaInteger())) {
-						//tuto by to malo ukoncit vsetko vyhladavanie a ukocit vsetky thready
-						System.out.println("\nNaslo zhodu v fromtHashTabulke");
-						nasloRiesenie = true;
-						return;
-					}else {
-						//vkladam stav do front hash tabulky
-						frontHashTabulka.vlozenieDoHashTabulky(priebeznyStav.stavNaInteger());
-						//vkladam stav do stromu
-						StromovyUzol<Stav> uzolVlavo = new StromovyUzol(priebeznyStav);
-						uzolVlavo.setRodic(uzol);
-						uzol.addDieta(uzolVlavo);
-					}	
+				if(!hashTabulka.jeVTabulke(priebeznyStavVlavo.stavNaInteger())) {
+					hashTabulka.vlozenieDoHashTabulky(priebeznyStavVlavo.stavNaInteger());
+					
+					//vkladam stav do stromu
+					StromovyUzol<Stav> uzolVlavo = new StromovyUzol<Stav>(priebeznyStavVlavo);
+					uzolVlavo.setRodic(uzol);
+					uzol.addDieta(uzolVlavo);
+					
 				}
 			}
 		}
